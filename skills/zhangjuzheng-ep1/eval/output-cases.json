@@ -44,6 +44,39 @@
         "reflection_space": "留时间给对方反思，而不是直接下指令",
         "own_action": "让对方自己提出改变动作，不提行动项不代劳"
       }
+    },
+    {
+      "id": "oc-05-child-explain",
+      "skill": "age-adapted-teaching-material",
+      "task": "给低龄受众讲明白一个抽象概念并设计教学材料。",
+      "input": "怎么给小学生把「改革开放」讲得通俗易懂？要不要配图？",
+      "assertions": {
+        "audience_first": "先评估受众接受能力，缺信息先采集不猜",
+        "concretize": "给出降低抽象度的具体手段（配图/故事化等）",
+        "no_learning_claim": "不把「爱看/听懂表达」等同「学会」"
+      }
+    },
+    {
+      "id": "oc-06-referral-vetting",
+      "skill": "key-person-selection-4-steps",
+      "task": "中间人推荐了关键人选，拿不准是否录用。",
+      "input": "朋友推荐了一个家教，说特别靠谱，我还没定，要不要直接录用？",
+      "assertions": {
+        "motive_check": "审查推荐人的动机与利益关系",
+        "verify_steps": "给面谈验证的具体步骤与判停条件",
+        "authorization": "授权与支持承诺作为独立一步"
+      }
+    },
+    {
+      "id": "oc-07-hobby-persuasion",
+      "skill": "interest-duty-priority-persuasion",
+      "task": "劝孩子收束影响学业的爱好，别吵起来。",
+      "input": "孩子沉迷画画不写作业，我想劝他收心又不吵架，怎么开口？",
+      "assertions": {
+        "legit_space": "先承认爱好本身没错（合法空间句）",
+        "degree_not_ban": "指向程度问题而非全盘否定",
+        "opportunity_cost": "说明被排挤的是什么，并给可类比失败先例或明确删除第 4 步"
+      }
     }
   ]
 }
