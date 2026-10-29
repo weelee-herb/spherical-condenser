@@ -1,0 +1,588 @@
+{
+  "skill": "daming-jiliang-zhangjuzheng-ep1",
+  "version": "0.1.0",
+  "source_book": "大明脊梁张居正·第 1 集（百家讲坛）— 郦波",
+  "bundle_id": "bundle.daming-jiliang-zhangjuzheng-ep1",
+  "darwin_compatible": true,
+  "minimum_pass_rate": 0.8,
+  "notes": "bundle 级压力测试：7 个晋级能力（f01/f03/f04/f05/f06/f08/f09）各配 should_trigger 3-5 条、should_not_trigger 诱饵 2-3 条（每 skill 至少 1 条为「应触发同书另一个能力」的跨 skill 混淆诱饵）、edge_case 1-3 条；6 个 router 能力（f02/f07/f10/f11/p05/p14）各 1 条 should_reach（经来源路由入口 zhangjuzheng-ep1-source 可达）。全部 should_not_trigger 容错为 0。",
+  "test_cases": [
+    {
+      "id": "f01-st-01",
+      "skill": "education-four-factors",
+      "type": "should_trigger",
+      "prompt": "孩子成绩一直往下掉，老师挺负责，我天天陪着写作业，家教也很严格，怎么还是不行？",
+      "expected_behavior": "调用 education-four-factors：逐格评估老师/学生/家长/陪读四要素的状态与证据，再查要素间相互作用，最后给系统级结论，不停留在单项指责。",
+      "notes": "正面场景：各环节「看起来都好」但结果差"
+    },
+    {
+      "id": "f01-st-02",
+      "skill": "education-four-factors",
+      "type": "should_trigger",
+      "prompt": "帮我诊断一下我们家的教育关系：老师、孩子、我和陪读阿姨各自做得怎么样，问题到底出在哪一环。",
+      "expected_behavior": "调用 education-four-factors，输出四要素状态表（要素/状态/证据/判定）＋相互作用清单＋系统级结论，证据不足的格标「未知」。",
+      "notes": "显式要求教育关系诊断"
+    },
+    {
+      "id": "f01-st-03",
+      "skill": "education-four-factors",
+      "type": "should_trigger",
+      "prompt": "给孩子报了名师班、请了一对一陪读、我在家也抓得很紧，孩子却越来越厌学，是不是组合哪里没配对？",
+      "expected_behavior": "调用 education-four-factors，重点查要素间相互作用与抵消，不满足于逐格好评，给系统级健康度结论。",
+      "notes": "系统级体检诉求"
+    },
+    {
+      "id": "f01-st-04",
+      "skill": "education-four-factors",
+      "type": "should_trigger",
+      "prompt": "班主任说孩子没问题、家教夸孩子悟性高、我也很配合，可结果就是很差，想做一次全面的教育关系体检。",
+      "expected_behavior": "调用 education-four-factors，按判据逐格判定（老师看投入、学生看悟性与尊师、家长看支持方式、陪读看纪律监督），每格附观察证据。",
+      "notes": "四要素证据并置的典型场景"
+    },
+    {
+      "id": "f01-st-05",
+      "skill": "education-four-factors",
+      "type": "should_trigger",
+      "prompt": "The teacher, student, parents and the tutor each look great, but my child's education is failing. Can you diagnose this education relationship?",
+      "expected_behavior": "Trigger education-four-factors; fill the four-factor table with status + evidence, then give a system-level conclusion instead of blaming one party.",
+      "notes": "英文触发词覆盖（education diagnosis / four factors）"
+    },
+    {
+      "id": "f01-snt-01",
+      "skill": "education-four-factors",
+      "type": "should_not_trigger",
+      "prompt": "学校换了新教学模式，有改前改后的成绩数据，帮我评估一下效果怎么样。",
+      "expected_behavior": "不应调用 education-four-factors；这是干预效果的量化评估，应调用 before-after-three-line-eval（f03）。",
+      "notes": "跨 skill 混淆诱饵：评干预效果 vs 诊断教育关系（f03 与 f01 不同域）"
+    },
+    {
+      "id": "f01-snt-02",
+      "skill": "education-four-factors",
+      "type": "should_not_trigger",
+      "prompt": "朋友推荐了个家教，说特别靠谱，我还没定，要不要直接录用？",
+      "expected_behavior": "不应调用 education-four-factors；任命前的人选把关应调用 key-person-selection-4-steps（f06）。",
+      "notes": "跨 skill 混淆诱饵：任命前流程 vs 任命后诊断（relations #12 contrasts-with）"
+    },
+    {
+      "id": "f01-snt-03",
+      "skill": "education-four-factors",
+      "type": "should_not_trigger",
+      "prompt": "帮我翻译这段英文邮件。",
+      "expected_behavior": "不应调用本包任何能力；与教育系统诊断无关的通用任务，直接拒绝或转通用翻译。",
+      "notes": "纯无关诱饵"
+    },
+    {
+      "id": "f01-edge-01",
+      "skill": "education-four-factors",
+      "type": "edge_case",
+      "prompt": "想给孩子选课外班组合，两个方案老师名气差不多，我该怎么比？",
+      "expected_behavior": "触发 education-four-factors：做系统级评估（要素＋相互作用）而非单项名气比较；选组合属 A2 场景 3。",
+      "notes": "边界：选型评估是否算诊断"
+    },
+    {
+      "id": "f01-edge-02",
+      "skill": "education-four-factors",
+      "type": "edge_case",
+      "prompt": "我觉得孩子教育出问题了，但只知道孩子成绩和老师评价，家长和陪读的情况我不了解。",
+      "expected_behavior": "触发 education-four-factors，但缺失格标「未知」并输出待采集清单，不猜值、不硬下系统结论（判停：证据不足则结论暂缓）。",
+      "notes": "边界：证据不全时先采集"
+    },
+    {
+      "id": "f03-st-01",
+      "skill": "before-after-three-line-eval",
+      "type": "should_trigger",
+      "prompt": "我们网站改版了，想评估改版前后留存和转化的变化，帮我设计个前后对比评估。",
+      "expected_behavior": "调用 before-after-three-line-eval：定基线（干预前）→量同口径后值→至少两条独立指标线交叉验证。",
+      "notes": "改版效果评估正面场景"
+    },
+    {
+      "id": "f03-st-02",
+      "skill": "before-after-three-line-eval",
+      "type": "should_trigger",
+      "prompt": "这轮改革到底有没有效果？我有改革前后的财政收入数据和土地数据，帮我交叉验证一下。",
+      "expected_behavior": "调用 before-after-three-line-eval，输出前后对比表（指标线/前值/后值/时点/口径/方向）＋交叉验证结论。",
+      "notes": "多线交叉验证场景"
+    },
+    {
+      "id": "f03-st-03",
+      "skill": "before-after-three-line-eval",
+      "type": "should_trigger",
+      "prompt": "老板说课程改版「效果显著」，但只给我看了完课率一个数，这个结论靠不靠谱？",
+      "expected_behavior": "调用 before-after-three-line-eval：检查基线、口径与指标线数量，单指标则输出「孤证，不足以下结论」。",
+      "notes": "检验他人宣称的效果"
+    },
+    {
+      "id": "f03-st-04",
+      "skill": "before-after-three-line-eval",
+      "type": "should_trigger",
+      "prompt": "We ran a campaign and have before/after data for revenue and active users. Help me evaluate the impact with cross-validation.",
+      "expected_behavior": "Trigger before-after-three-line-eval; build the before-after table and cross-validate at least two independent metric lines.",
+      "notes": "英文触发词覆盖（baseline / cross-validation / evaluate impact）"
+    },
+    {
+      "id": "f03-snt-01",
+      "skill": "before-after-three-line-eval",
+      "type": "should_not_trigger",
+      "prompt": "我们团队每个成员单拎出来都挺强，整体项目却做不成，是不是内部在互相抵消？",
+      "expected_behavior": "不应调用 before-after-three-line-eval；应经来源路由入口 zhangjuzheng-ep1-source 到 four-best-sum-zero（f02）查要素间抵消机制假设。",
+      "notes": "跨 skill 混淆诱饵：机制路线 vs 指标路线（relations #6 contrasts-with）"
+    },
+    {
+      "id": "f03-snt-02",
+      "skill": "before-after-three-line-eval",
+      "type": "should_not_trigger",
+      "prompt": "帮我客观评价一下这位候选人，推荐人和前同事的说法完全相反。",
+      "expected_behavior": "不应调用 before-after-three-line-eval；评人用 historical-figure-multi-source-eval（f10），经来源路由入口可达。",
+      "notes": "跨 skill 混淆诱饵：评人 vs 评干预（relations #8 contrasts-with）"
+    },
+    {
+      "id": "f03-snt-03",
+      "skill": "before-after-three-line-eval",
+      "type": "should_not_trigger",
+      "prompt": "帮我算一下这个月销售额环比涨了多少。",
+      "expected_behavior": "不应调用本包能力；纯计算查询，无干预前后评估意图。",
+      "notes": "纯无关诱饵"
+    },
+    {
+      "id": "f03-edge-01",
+      "skill": "before-after-three-line-eval",
+      "type": "edge_case",
+      "prompt": "评估课程改版效果，但手里只有完课率一个指标，前后数据都有。",
+      "expected_behavior": "触发 before-after-three-line-eval，但按判停条件输出「单指标孤证，不足以下结论」，不硬下结论。",
+      "notes": "边界：单线孤证"
+    },
+    {
+      "id": "f03-edge-02",
+      "skill": "before-after-three-line-eval",
+      "type": "edge_case",
+      "prompt": "改革前的亏损按「巨亏」口径、改革后的盈余按「结余」口径记的，帮我估个大概效果。",
+      "expected_behavior": "触发 before-after-three-line-eval，但口径不一致 → 停止评估、要求统一口径，不猜值。",
+      "notes": "边界：口径不一致判停"
+    },
+    {
+      "id": "f04-st-01",
+      "skill": "age-adapted-teaching-material",
+      "type": "should_trigger",
+      "prompt": "怎么给 7 岁的孩子讲明白「通货膨胀」这个概念？",
+      "expected_behavior": "调用 age-adapted-teaching-material：先评估受众接受能力→降低抽象度（配图/故事化）→定义观察反馈指标。",
+      "notes": "低龄受众讲抽象概念"
+    },
+    {
+      "id": "f04-st-02",
+      "skill": "age-adapted-teaching-material",
+      "type": "should_trigger",
+      "prompt": "我要给小学生做一套历史入门课件，怎么按他们的年龄把内容做得看得懂？",
+      "expected_behavior": "调用 age-adapted-teaching-material，输出适配方案（受众画像/载体/呈现/样例）＋反馈观察项清单。",
+      "notes": "按年龄适配课件"
+    },
+    {
+      "id": "f04-st-03",
+      "skill": "age-adapted-teaching-material",
+      "type": "should_trigger",
+      "prompt": "爸妈 60 多岁了，想学用智能手机，我给他们做一份图解教程该怎么做？",
+      "expected_behavior": "调用 age-adapted-teaching-material：评估接受能力→降低抽象度（图解）→观察使用行为反馈，适配优先于精美。",
+      "notes": "高门槛受众图解材料"
+    },
+    {
+      "id": "f04-st-04",
+      "skill": "age-adapted-teaching-material",
+      "type": "should_trigger",
+      "prompt": "给零基础成人讲微积分，怎么把抽象概念讲简单，配图还是讲故事？",
+      "expected_behavior": "调用 age-adapted-teaching-material，给出降抽象方案与样例片段，抽象层级不超过受众画像层级。",
+      "notes": "零基础成人场景"
+    },
+    {
+      "id": "f04-snt-01",
+      "skill": "age-adapted-teaching-material",
+      "type": "should_not_trigger",
+      "prompt": "下周我要开一门 12 周的课，帮我检查一下备课准备得够不够。",
+      "expected_behavior": "不应调用 age-adapted-teaching-material；备课投入自查应经来源路由入口到 teaching-prep-three-rules（p05）。",
+      "notes": "跨 skill 混淆诱饵：备课检查 vs 材料设计（relations #10 composes-with 前置关系）"
+    },
+    {
+      "id": "f04-snt-02",
+      "skill": "age-adapted-teaching-material",
+      "type": "should_not_trigger",
+      "prompt": "我要做三集连载历史视频，开头怎么设悬念才能让人追下去？",
+      "expected_behavior": "不应调用 age-adapted-teaching-material；悬念与排期用 suspense-hook-delayed-reveal（f05）。",
+      "notes": "跨 skill 混淆诱饵：让人听懂 vs 让人追更（relations #11 composes-with）"
+    },
+    {
+      "id": "f04-snt-03",
+      "skill": "age-adapted-teaching-material",
+      "type": "should_not_trigger",
+      "prompt": "帮我写一份给投资人的融资路演稿。",
+      "expected_behavior": "不应调用 age-adapted-teaching-material；受众为专业投资人，无理解门槛、不涉及教学材料。",
+      "notes": "纯无关诱饵"
+    },
+    {
+      "id": "f04-edge-01",
+      "skill": "age-adapted-teaching-material",
+      "type": "edge_case",
+      "prompt": "孩子问「为什么天是蓝的」，我讲了两遍他还是懵，要不我给他画个图解？",
+      "expected_behavior": "触发 age-adapted-teaching-material：从口头答疑转向产出材料，先采集受众信息（知识基线/注意力）再设计图解，不猜值。",
+      "notes": "边界：口头答疑转材料产出"
+    },
+    {
+      "id": "f04-edge-02",
+      "skill": "age-adapted-teaching-material",
+      "type": "edge_case",
+      "prompt": "给 10 岁孩子做的数学启蒙绘本他很喜欢翻，是不是说明教学效果很好？",
+      "expected_behavior": "触发 age-adapted-teaching-material，但输出有效性限定：「喜欢」≠「学会」，只报告可观察使用行为证据，不宣称学习效果。",
+      "notes": "边界：喜欢不等于学会"
+    },
+    {
+      "id": "f05-st-01",
+      "skill": "suspense-hook-delayed-reveal",
+      "type": "should_trigger",
+      "prompt": "我要做三集连载的历史视频，第一集开头怎么设悬念才能让人想看第二集？",
+      "expected_behavior": "调用 suspense-hook-delayed-reveal：抛反差设问→部分解答→保留核心谜底并声明「下期分析」→排期下期兑现。",
+      "notes": "连载视频钩子设计"
+    },
+    {
+      "id": "f05-st-02",
+      "skill": "suspense-hook-delayed-reveal",
+      "type": "should_trigger",
+      "prompt": "我的播客完播率低，想学百家讲坛那种「下期预告」，怎么规划本期揭晓什么、下期留什么？",
+      "expected_behavior": "调用 suspense-hook-delayed-reveal，输出钩子排期表（期次/设问/当场解答范围/保留谜底/交接语/兑现计划）。",
+      "notes": "揭晓与悬念排期"
+    },
+    {
+      "id": "f05-st-03",
+      "skill": "suspense-hook-delayed-reveal",
+      "type": "should_trigger",
+      "prompt": "写连载公众号文章，结尾怎么留钩子让读者追更？",
+      "expected_behavior": "调用 suspense-hook-delayed-reveal，为每期设计反差设问与延迟揭晓交接点。",
+      "notes": "连载文章钩子"
+    },
+    {
+      "id": "f05-st-04",
+      "skill": "suspense-hook-delayed-reveal",
+      "type": "should_trigger",
+      "prompt": "我有两个反差素材：天才落榜、权臣被清算，怎么排到三期内容里当悬念用？",
+      "expected_behavior": "调用 suspense-hook-delayed-reveal，把反差素材写成设问并做三期排期，标注「下期兑现」为创作者自行守约项。",
+      "notes": "反差素材排期"
+    },
+    {
+      "id": "f05-snt-01",
+      "skill": "suspense-hook-delayed-reveal",
+      "type": "should_not_trigger",
+      "prompt": "怎么给小学生把「改革开放」讲得通俗易懂，要配图吗？",
+      "expected_behavior": "不应调用 suspense-hook-delayed-reveal；降低理解门槛用 age-adapted-teaching-material（f04）。",
+      "notes": "跨 skill 混淆诱饵：讲明白 vs 讲追更"
+    },
+    {
+      "id": "f05-snt-02",
+      "skill": "suspense-hook-delayed-reveal",
+      "type": "should_not_trigger",
+      "prompt": "这三期视频的播放数据出来了，帮我评估哪期表现最好。",
+      "expected_behavior": "不应调用任何能力；三期播放数据对比无干预前后语义，直接处理为普通数据解读。",
+      "notes": "audit 2026-10-30: 三期播放数据对比无『干预前后』语义，超出 before-after-three-line-eval 契约；原按混淆诱饵设计过狠，按方法论修测试并留审计。"
+    },
+    {
+      "id": "f05-snt-03",
+      "skill": "suspense-hook-delayed-reveal",
+      "type": "should_not_trigger",
+      "prompt": "帮我写一篇当天发布的新闻报道，一次性写完。",
+      "expected_behavior": "不应调用 suspense-hook-delayed-reveal；单期一次性内容，第 4 步下期兑现无处落地，只可用前两步。",
+      "notes": "单期内容诱饵"
+    },
+    {
+      "id": "f05-edge-01",
+      "skill": "suspense-hook-delayed-reveal",
+      "type": "edge_case",
+      "prompt": "我做一个单期视频，开头也想用个设问抓眼球，能不能用这套钩子方法？",
+      "expected_behavior": "触发 suspense-hook-delayed-reveal 但限定：单期内容只可用前两步（反差设问＋部分解答），无下期兑现，需向用户说明这一边界。",
+      "notes": "边界：单期内容部分适用"
+    },
+    {
+      "id": "f05-edge-02",
+      "skill": "suspense-hook-delayed-reveal",
+      "type": "edge_case",
+      "prompt": "我想用李太后和张居正的感情传闻当钩子，够不够劲爆？",
+      "expected_behavior": "触发 suspense-hook-delayed-reveal，但按失败模式引导：史料争议不得包装成定论式悬念，改用有原文依据的反差设问。",
+      "notes": "边界：八卦当钩子"
+    },
+    {
+      "id": "f06-st-01",
+      "skill": "key-person-selection-4-steps",
+      "type": "should_trigger",
+      "prompt": "朋友给我推荐了一位家教，说特别靠谱，我要不要直接定下来？",
+      "expected_behavior": "调用 key-person-selection-4-steps：识别需求→记录推荐链条→面谈验证→授权并给支持承诺，同时审查推荐人动机与利益关系。",
+      "notes": "中间人推荐场景"
+    },
+    {
+      "id": "f06-st-02",
+      "skill": "key-person-selection-4-steps",
+      "type": "should_trigger",
+      "prompt": "团队要定一个技术负责人，有人内推了候选人，我该走什么流程？",
+      "expected_behavior": "调用 key-person-selection-4-steps，输出四步流程＋推荐人动机审查项；关系查不清时暂停任命。",
+      "notes": "关键岗位任命流程"
+    },
+    {
+      "id": "f06-st-03",
+      "skill": "key-person-selection-4-steps",
+      "type": "should_trigger",
+      "prompt": "当初怎么就选了那个合伙人，现在看是看走眼了，帮我捋一遍任命流程，看哪一步漏了。",
+      "expected_behavior": "调用 key-person-selection-4-steps，按四步复盘任命，重点核对推荐动机与利益关系审查项。",
+      "notes": "复盘看走眼的任命"
+    },
+    {
+      "id": "f06-st-04",
+      "skill": "key-person-selection-4-steps",
+      "type": "should_trigger",
+      "prompt": "中介推荐了一个月嫂，我要怎么审查才放心？",
+      "expected_behavior": "调用 key-person-selection-4-steps：记录推荐链条（中介与月嫂关系）→面谈/试工验证→授权并约定支持与复核方式。",
+      "notes": "生活场景任命把关"
+    },
+    {
+      "id": "f06-snt-01",
+      "skill": "key-person-selection-4-steps",
+      "type": "should_not_trigger",
+      "prompt": "孩子现在的老师、家教和我们家长都挺配合，但孩子状态还是不好，帮我诊断一下教育关系哪里出了问题。",
+      "expected_behavior": "不应调用 key-person-selection-4-steps；任命后的关系健康度诊断用 education-four-factors（f01）。",
+      "notes": "跨 skill 混淆诱饵：任命前流程 vs 任命后诊断（relations #12）"
+    },
+    {
+      "id": "f06-snt-02",
+      "skill": "key-person-selection-4-steps",
+      "type": "should_not_trigger",
+      "prompt": "帮我客观评价一下候选人 A 这个人，各方说法不一。",
+      "expected_behavior": "不应调用 key-person-selection-4-steps；无任命场景的纯评估用 historical-figure-multi-source-eval（f10），经来源路由入口可达。",
+      "notes": "跨 skill 混淆诱饵：评人不走流程（relations #13 composes-with 的职责边界）"
+    },
+    {
+      "id": "f06-snt-03",
+      "skill": "key-person-selection-4-steps",
+      "type": "should_not_trigger",
+      "prompt": "公司要招十个销售，帮我写份招聘 JD。",
+      "expected_behavior": "不应调用 key-person-selection-4-steps；无中间人的公开招聘不在此流程覆盖内。",
+      "notes": "纯无关诱饵"
+    },
+    {
+      "id": "f06-edge-01",
+      "skill": "key-person-selection-4-steps",
+      "type": "edge_case",
+      "prompt": "推荐人是我亲戚，说「都是自家人，放心用」，我还要继续走流程吗？",
+      "expected_behavior": "触发 key-person-selection-4-steps，命中判停条件：推荐人与候选人利益关系查不清 → 暂停任命，输出「动机未明」。",
+      "notes": "边界：利益关系不明"
+    },
+    {
+      "id": "f06-edge-02",
+      "skill": "key-person-selection-4-steps",
+      "type": "edge_case",
+      "prompt": "没有中间人推荐，我在招聘网站上直接看到一个候选人，能用这套流程吗？",
+      "expected_behavior": "触发 key-person-selection-4-steps 但注明边界：推荐环节不适用（流程以推荐为锚），面谈验证＋授权步骤可借鉴。",
+      "notes": "边界：无推荐锚的招聘"
+    },
+    {
+      "id": "f08-st-01",
+      "skill": "interest-duty-priority-persuasion",
+      "type": "should_trigger",
+      "prompt": "怎么劝孩子少打游戏？一说就吵。",
+      "expected_behavior": "调用 interest-duty-priority-persuasion：先给合法空间→指向程度→说明排挤了什么→配可类比失败先例，输出四步话术脚本。",
+      "notes": "高频正面场景"
+    },
+    {
+      "id": "f08-st-02",
+      "skill": "interest-duty-priority-persuasion",
+      "type": "should_trigger",
+      "prompt": "男朋友天天刷短视频到半夜，上班没精神，我想劝他又怕伤感情。",
+      "expected_behavior": "调用 interest-duty-priority-persuasion，组织话术脚本：承认爱好合法→用投入数据锚定程度→列被挤占事项→配同构先例。",
+      "notes": "亲密关系场景"
+    },
+    {
+      "id": "f08-st-03",
+      "skill": "interest-duty-priority-persuasion",
+      "type": "should_trigger",
+      "prompt": "女儿追星影响学习，我该怎么跟她谈？",
+      "expected_behavior": "调用 interest-duty-priority-persuasion，四步脚本＋预期反应观察项；无同构先例则删第 4 步。",
+      "notes": "追星场景"
+    },
+    {
+      "id": "f08-st-04",
+      "skill": "interest-duty-priority-persuasion",
+      "type": "should_trigger",
+      "prompt": "同事把大把时间投在副业上，主业频频出错，怎么劝他收一收？",
+      "expected_behavior": "调用 interest-duty-priority-persuasion，先取投入与被挤占证据再组织话术，不攻击副业本身。",
+      "notes": "职场场景"
+    },
+    {
+      "id": "f08-st-05",
+      "skill": "interest-duty-priority-persuasion",
+      "type": "should_trigger",
+      "prompt": "How do I convince my son to cut back on gaming without a fight?",
+      "expected_behavior": "Trigger interest-duty-priority-persuasion; produce the 4-step script: legitimize the hobby, target the degree, name what it crowds out, add a comparable cautionary example.",
+      "notes": "英文触发词覆盖（persuasion without confrontation / hobby vs duty）"
+    },
+    {
+      "id": "f08-snt-01",
+      "skill": "interest-duty-priority-persuasion",
+      "type": "should_not_trigger",
+      "prompt": "下属季度报告写得有进步，但结论还是不够清晰，我想提改进建议又不打击积极性，怎么反馈？",
+      "expected_behavior": "不应调用 interest-duty-priority-persuasion；给产出提改进反馈用 teacher-student-feedback-loop（f09），输出契约是反馈回路而非说服脚本。",
+      "notes": "跨 skill 混淆诱饵：f08/f09 近邻负例（同源场景、输出契约不同，硬性要求）"
+    },
+    {
+      "id": "f08-snt-02",
+      "skill": "interest-duty-priority-persuasion",
+      "type": "should_not_trigger",
+      "prompt": "孩子迷上游戏后成绩崩了，老师、家教、我们家长都很上心还是不行，帮我整体诊断一下教育关系。",
+      "expected_behavior": "不应调用 interest-duty-priority-persuasion；结构层诊断用 education-four-factors（f01），单次说服不替代结构诊断。",
+      "notes": "跨 skill 混淆诱饵：单次说服 vs 结构诊断"
+    },
+    {
+      "id": "f08-snt-03",
+      "skill": "interest-duty-priority-persuasion",
+      "type": "should_not_trigger",
+      "prompt": "孩子已经游戏成瘾，昼夜颠倒、课都不上了，怎么办？",
+      "expected_behavior": "不应调用 interest-duty-priority-persuasion；成瘾危机需直接干预，不适用温和说服话术。",
+      "notes": "危机场景诱饵"
+    },
+    {
+      "id": "f08-edge-01",
+      "skill": "interest-duty-priority-persuasion",
+      "type": "edge_case",
+      "prompt": "孩子每天练琴一小时，我觉得是好事，但期中排名掉了点，要不要让他停掉练琴？",
+      "expected_behavior": "触发 interest-duty-priority-persuasion 但先判停：拿不到时间挤占与被挤占的证据 → 先取数据再谈话术，不臆断「玩物丧志」。",
+      "notes": "边界：挤占证据不足"
+    },
+    {
+      "id": "f08-edge-02",
+      "skill": "interest-duty-priority-persuasion",
+      "type": "edge_case",
+      "prompt": "我找不到合适的失败先例，用宋徽宗玩物丧志当例子行不行？",
+      "expected_behavior": "触发 interest-duty-priority-persuasion，按判停条件：无同构先例 → 删第 4 步，不硬套名人案例，宋徽宗只作结构参考。",
+      "notes": "边界：先例硬套"
+    },
+    {
+      "id": "f09-st-01",
+      "skill": "teacher-student-feedback-loop",
+      "type": "should_trigger",
+      "prompt": "怎么给下属提建议他才听得进去？",
+      "expected_behavior": "调用 teacher-student-feedback-loop：先肯定具体优点→转折提出引导→留时间反思→让对方自己提出行动项。",
+      "notes": "高频正面场景"
+    },
+    {
+      "id": "f09-st-02",
+      "skill": "teacher-student-feedback-loop",
+      "type": "should_trigger",
+      "prompt": "孩子画了幅画拿给我看，我觉得构图有问题，怎么回应不打击他？",
+      "expected_behavior": "调用 teacher-student-feedback-loop，输出反馈脚本（肯定句/转折句/引导句）＋对方回应记录项。",
+      "notes": "亲子反馈场景"
+    },
+    {
+      "id": "f09-st-03",
+      "skill": "teacher-student-feedback-loop",
+      "type": "should_trigger",
+      "prompt": "实习生的方案不行，我该怎么反馈让他自己发现问题？",
+      "expected_behavior": "调用 teacher-student-feedback-loop，用引导问题代替直接给答案，留出对方自提行动项的空间。",
+      "notes": "带教场景"
+    },
+    {
+      "id": "f09-st-04",
+      "skill": "teacher-student-feedback-loop",
+      "type": "should_trigger",
+      "prompt": "想让学生自己意识到错在哪，而不是我直接告诉他答案，怎么引导？",
+      "expected_behavior": "调用 teacher-student-feedback-loop，走回路五环节：展示→肯定→转折引导→反思→对方自提行动。",
+      "notes": "自提改变诉求"
+    },
+    {
+      "id": "f09-st-05",
+      "skill": "teacher-student-feedback-loop",
+      "type": "should_trigger",
+      "prompt": "How do I give constructive feedback to my report without demotivating him?",
+      "expected_behavior": "Trigger teacher-student-feedback-loop; build the script with affirmation, pivot, reflection space, and an ownership-driven action item.",
+      "notes": "英文触发词覆盖（constructive feedback / get the person to own the change）"
+    },
+    {
+      "id": "f09-snt-01",
+      "skill": "teacher-student-feedback-loop",
+      "type": "should_not_trigger",
+      "prompt": "孩子沉迷画画不写作业，我怎么劝他收心又不吵？",
+      "expected_behavior": "不应调用 teacher-student-feedback-loop；劝投入取舍用 interest-duty-priority-persuasion（f08）说服脚本。",
+      "notes": "跨 skill 混淆诱饵：f08/f09 近邻负例（硬性要求）"
+    },
+    {
+      "id": "f09-snt-02",
+      "skill": "teacher-student-feedback-loop",
+      "type": "should_not_trigger",
+      "prompt": "孩子的老师、家长、陪读都很上心，但孩子越来越封闭，帮我整体诊断这段教育关系。",
+      "expected_behavior": "不应调用 teacher-student-feedback-loop；整体关系诊断用 education-four-factors（f01），本卡只负责单次反馈。",
+      "notes": "跨 skill 混淆诱饵：关系诊断 vs 单次反馈"
+    },
+    {
+      "id": "f09-snt-03",
+      "skill": "teacher-student-feedback-loop",
+      "type": "should_not_trigger",
+      "prompt": "车间工人没戴安全帽，我怎么沟通比较温和不伤和气？",
+      "expected_behavior": "不应调用 teacher-student-feedback-loop；安全红线必须立即下指令，反馈回路等不起反思时间。",
+      "notes": "安全场景诱饵"
+    },
+    {
+      "id": "f09-edge-01",
+      "skill": "teacher-student-feedback-loop",
+      "type": "edge_case",
+      "prompt": "我肯定了他、也指出了问题，他却不接话也不提行动项，我该直接给他列个改进清单吗？",
+      "expected_behavior": "触发 teacher-student-feedback-loop，命中判停条件：对方不提行动项 → 不代劳下指令，记录「未提出」或返回引导。",
+      "notes": "边界：对方不提行动项"
+    },
+    {
+      "id": "f09-edge-02",
+      "skill": "teacher-student-feedback-loop",
+      "type": "edge_case",
+      "prompt": "孩子特别听我话，反馈回路每次跑得都很顺，是不是说明我沟通很成功？",
+      "expected_behavior": "触发 teacher-student-feedback-loop，输出警示：权力差下「顺」可能是顺从而非认同，警惕长期逆反（ce01）。",
+      "notes": "边界：顺从不等于认同"
+    },
+    {
+      "id": "f02-reach-01",
+      "skill": "four-best-sum-zero",
+      "type": "should_reach",
+      "prompt": "我们组每个人单看都很强，可整体就是拿不下项目，每个环节都对但结果为零，到底哪里在互相抵消？",
+      "expected_behavior": "经来源路由入口 zhangjuzheng-ep1-source 路由到 four-best-sum-zero（f02）卡：确认单项→列相互作用→找抵消机制假设，不追问「哪个要素不够好」。",
+      "notes": "router 可达测试：全明星却失败"
+    },
+    {
+      "id": "f07-reach-01",
+      "skill": "multi-party-escalation-chain",
+      "type": "should_reach",
+      "prompt": "孩子只是上课说了小话，被老师告家长、家长又闹到班主任那里，最后连转班都搬出来了，这个处理是不是太重了？",
+      "expected_behavior": "经来源路由入口 zhangjuzheng-ep1-source 路由到 multi-party-escalation-chain（f07）卡：画升级链→逐项查三个过载信号→判定过载风险。",
+      "notes": "router 可达测试：小过失被逐级放大"
+    },
+    {
+      "id": "f10-reach-01",
+      "skill": "historical-figure-multi-source-eval",
+      "type": "should_reach",
+      "prompt": "帮我客观评价一下张居正这个人，别只听一面之词，反对他的人怎么说？",
+      "expected_behavior": "经来源路由入口 zhangjuzheng-ep1-source 路由到 historical-figure-multi-source-eval（f10）卡：采四类关系人评价，重点核对对手阵营，输出共识/争议结构。",
+      "notes": "router 可达测试：多源评价人物"
+    },
+    {
+      "id": "f11-reach-01",
+      "skill": "dual-goal-integrated-design",
+      "type": "should_reach",
+      "prompt": "我一手把公司做起来，现在又在培养接班人，他以后会不会反过来推翻我的改革？",
+      "expected_behavior": "经来源路由入口 zhangjuzheng-ep1-source 路由到 dual-goal-integrated-design（f11）卡：并列两目标→查「传人反向摧毁事业」路径→输出风险预判清单。",
+      "notes": "router 可达测试：事业与接班人双目标"
+    },
+    {
+      "id": "p05-reach-01",
+      "skill": "teaching-prep-three-rules",
+      "type": "should_reach",
+      "prompt": "下周要开一门新课程，上课前我该做哪些准备？给我一份备课清单。",
+      "expected_behavior": "经来源路由入口 zhangjuzheng-ep1-source 路由到 teaching-prep-three-rules（p05）卡：输出 3 项核对表＋缺口清单。",
+      "notes": "router 可达测试：备课准备自查"
+    },
+    {
+      "id": "p14-reach-01",
+      "skill": "reign-year-conversion",
+      "type": "should_reach",
+      "prompt": "万历八年对应公元哪一年？隆庆六年又是什么时候？帮我核对这条时间轴。",
+      "expected_behavior": "经来源路由入口 zhangjuzheng-ep1-source 路由到 reign-year-conversion（p14）卡：按万历 N 年＝1572+N 换算并回验两锚点，逐项标「原文锚点/公式推导」来源标签。",
+      "notes": "router 可达测试：年号纪年换算"
+    }
+  ],
+  "audit_notes": "三期播放数据对比无『干预前后』语义，超出 before-after-three-line-eval 契约；原按混淆诱饵设计过狠，按方法论修测试并留审计。"
+}

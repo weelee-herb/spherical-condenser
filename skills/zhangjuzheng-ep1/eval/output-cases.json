@@ -1,0 +1,27 @@
+{
+  "note": "阶段 4 输出侧评测用例（output_cases）。执行者只看到 task 与 input；断言仅判卷用。",
+  "cases": [
+    {
+      "id": "oc-01-education-diagnosis",
+      "skill": "education-four-factors",
+      "task": "用教育四维诊断框架处理下列情况并输出结构化诊断。",
+      "input": "孩子成绩持续下滑；班主任很负责，家长每天陪写作业，家教老师也很严格。用四要素框架诊断问题可能出在哪，给出系统级结论与下一步。",
+      "assertions": {
+        "contains_four_grid": "输出包含老师/学生/家长/陪读四格的逐格状态判定",
+        "system_conclusion": "给出超过单项归因的系统级结论",
+        "evidence_gap": "对信息不足的格标注'未知/待采集'而非编造"
+      }
+    },
+    {
+      "id": "oc-02-hook-plan",
+      "skill": "suspense-hook-delayed-reveal",
+      "task": "用悬念钩子方法设计一个三期连载历史视频的钩子与排期。",
+      "input": "三集连载讲'一条鞭法'。设计每集开头的钩子、部分解答、保留谜底与下期兑现计划，输出成清单。",
+      "assertions": {
+        "four_steps": "钩子清单覆盖反差设问/部分解答/保留谜底/下期兑现四步",
+        "episode_mapping": "三步内容与三集一一对应，第 4 步落在下集开头",
+        "boundary": "说明单期内容不可用第 4 步的边界"
+      }
+    }
+  ]
+}
