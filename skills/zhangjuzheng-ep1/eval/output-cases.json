@@ -77,6 +77,42 @@
         "degree_not_ban": "指向程度问题而非全盘否定",
         "opportunity_cost": "说明被排挤的是什么，并给可类比失败先例或明确删除第 4 步"
       }
+    },
+    {
+      "id": "oc-08-best-sum-zero",
+      "skill": "zhangjuzheng-ep1-source",
+      "router_card": "four-best-sum-zero",
+      "task": "团队各成员都很强但整体失败，查系统抵消。",
+      "input": "我们团队每个成员单拎出来都挺强，整体项目却做不成，是不是内部在互相抵消？",
+      "assertions": {
+        "no_single_blame": "不停留在单项归因，转向要素间抵消机制",
+        "hypothesis_list": "给出至少 2 条具体的抵消机制假设",
+        "evidence_aware": "区分事实与待验证假设"
+      }
+    },
+    {
+      "id": "oc-09-multi-source-eval",
+      "skill": "zhangjuzheng-ep1-source",
+      "router_card": "historical-figure-multi-source-eval",
+      "task": "各方说法相反的候选人客观评价。",
+      "input": "帮我客观评价候选人 A 这个人，推荐人和前同事的说法完全相反。",
+      "assertions": {
+        "source_classes": "按多类关系人分证据（推荐人/同事/对立面等）",
+        "opponent_weight": "重点核对反对者阵营的评价",
+        "strength_label": "结论标注证据强度，不把传闻当事实"
+      }
+    },
+    {
+      "id": "oc-10-reign-year",
+      "skill": "zhangjuzheng-ep1-source",
+      "router_card": "reign-year-conversion",
+      "task": "万历/隆庆年号换算。",
+      "input": "万历十年是公元哪一年？隆庆六年呢？",
+      "assertions": {
+        "wanli": "万历十年 = 1582 年（1572+10）",
+        "longqing": "隆庆六年 = 1572 年",
+        "anchor": "给出换算锚点与回验方法"
+      }
     }
   ]
 }
