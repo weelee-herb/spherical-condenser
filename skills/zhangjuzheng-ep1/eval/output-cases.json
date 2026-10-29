@@ -22,6 +22,28 @@
         "episode_mapping": "三步内容与三集一一对应，第 4 步落在下集开头",
         "boundary": "说明单期内容不可用第 4 步的边界"
       }
+    },
+    {
+      "id": "oc-03-single-metric",
+      "skill": "before-after-three-line-eval",
+      "task": "评估一次课程改版是否有成效。",
+      "input": "领导让我评估课程改版有没有效果，但我手里只有完课率这一个指标的前后数据。请给出你的评估结论。",
+      "assertions": {
+        "stop_condition": "明确输出『单指标孤证，不足以下结论』的判停结论",
+        "no_fabrication": "不基于单指标编造效果判断",
+        "remedy": "给出补数据清单（至少再补一条独立指标线）"
+      }
+    },
+    {
+      "id": "oc-04-feedback-loop",
+      "skill": "teacher-student-feedback-loop",
+      "task": "给下属提改进建议，方式要不打击积极性。",
+      "input": "下属季度报告写得有进步，但结论不清晰。我想提改进建议又不打击他积极性，怎么反馈？",
+      "assertions": {
+        "praise_first": "先肯定具体优点（进步点）",
+        "reflection_space": "留时间给对方反思，而不是直接下指令",
+        "own_action": "让对方自己提出改变动作，不提行动项不代劳"
+      }
     }
   ]
 }
