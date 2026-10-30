@@ -113,6 +113,42 @@
         "longqing": "隆庆六年 = 1572 年",
         "anchor": "给出换算锚点与回验方法"
       }
+    },
+    {
+      "id": "oc-11-escalation-chain",
+      "skill": "zhangjuzheng-ep1-source",
+      "router_card": "multi-party-escalation-chain",
+      "task": "复盘小过失被逐级放大的管教场景。",
+      "input": "孩子一次小错，被家长、家教、学校层层加码处罚。这套升级链有问题吗？帮我分析。",
+      "assertions": {
+        "chain_map": "画出各级加码的链条而非只评一句",
+        "overload_signals": "给出升级链过载的判据（至少 2 个信号）",
+        "not_verdict_only": "细节不足时输出「无法判定」而不是硬下结论"
+      }
+    },
+    {
+      "id": "oc-12-dual-goal",
+      "skill": "zhangjuzheng-ep1-source",
+      "router_card": "dual-goal-integrated-design",
+      "task": "事业与接班人的双目标风险预判。",
+      "input": "我想同时把生意做大并培养接班人，怕接班人将来推翻我的路线。怎么设计？",
+      "assertions": {
+        "two_goals": "两个目标并列设计，不牺牲其一",
+        "risk_path": "显式检查「接班人反向摧毁事业」的风险路径",
+        "no_fabrication": "机制不完整处只标风险，不虚构解释"
+      }
+    },
+    {
+      "id": "oc-13-teaching-prep",
+      "skill": "zhangjuzheng-ep1-source",
+      "router_card": "teaching-prep-three-rules",
+      "task": "开课/重要交付前的准备度自查。",
+      "input": "下周我要开一门 12 周的课，帮我检查备课准备得够不够。",
+      "assertions": {
+        "three_rules": "按三项规则逐条自查（大纲本人筹划/计划提前编好/提前到场）",
+        "scaled": "「提前几年」按课程周期等比缩放，不机械照抄",
+        "honest_limit": "只查投入不保证效果"
+      }
     }
   ]
 }
